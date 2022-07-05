@@ -1,4 +1,5 @@
 import https from "../helpers/https";
+import { useLocationState } from "../stores/location";
 import { Tovar } from "./getItemsList";
 import { getTradePoint, TradePointBase } from "./getTradePoint";
 
@@ -31,12 +32,20 @@ export type ItemPrice = {
 };
 
 export const getItemPrices = async (itemId: number) => {
+  const location = useLocationState();
+  const tradePoint = location.tradePoint;
+  const city = location.city?.id;
+
+  if (tradePoint === undefined) {
+    throw new Error("tradePoint не задан!");
+  }
+
   const itemPrices: ItemPrice[] = [];
 
   const data = await https.get<Data>("/tovar/InfoWv2", {
     params: {
-      idTradePoint: 15651,
-      idCity: 1,
+      idTradePoint: tradePoint,
+      idCity: city,
       idTovarProp: itemId,
       ApiVersion: 3,
     },
@@ -45,7 +54,7 @@ export const getItemPrices = async (itemId: number) => {
   const itemDetail = data!.Data.Tovar;
   const otherTradePoints = data!.Data.OtherTradePoints;
 
-  const currTradePoint = await getTradePoint(15651);
+  const currTradePoint = await getTradePoint(tradePoint);
 
   if (currTradePoint) {
     const tradePoint: TradePoint = {
@@ -79,7 +88,7 @@ export const getItemPrices = async (itemId: number) => {
       const tradePointItem = await https.get<Data>("/tovar/InfoWv2", {
         params: {
           idTradePoint: tradePoint.idTradePoint,
-          idCity: 1,
+          idCity: city,
           idTovarProp: itemId,
           ApiVersion: 3,
         },

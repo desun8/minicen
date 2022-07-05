@@ -1,12 +1,21 @@
 <script setup lang="ts">
-import { onMounted, reactive, ref } from "vue";
+import { computed, onMounted, reactive, ref } from "vue";
 import { getItemPrices, ItemPrice, ItemWaitPrice } from "../api/getItemPrices";
 import { getItemsList, Tovar } from "../api/getItemsList";
 import { Search } from "@element-plus/icons-vue";
 import { getSearchSuggestions } from "../api/getSearchSuggestions";
+import { useLocationState } from "../stores/location";
+import { useSearchState } from "../stores/search";
+import { useItemsDetailState } from "../stores/itemsDetail";
 
-const items = ref<Tovar[] | null>(null);
-let itemDetail = ref<ItemPrice[] | null>(null);
+const locationState = useLocationState();
+const cityName = computed(() => locationState.city?.transliteration);
+
+const searchState = useSearchState();
+const detailsState = useItemsDetailState();
+
+const items = ref<Tovar[]>();
+let itemDetail = ref<ItemPrice[]>();
 let itemName = ref<string>("");
 
 let isLoadingItems = ref(false);
@@ -16,9 +25,16 @@ let dialogVisible = ref(false);
 const form = reactive({
   input: "",
 });
+
 const handleSearch = async () => {
   isLoadingItems.value = true;
-  items.value = await getItemsList(form.input);
+
+  if (!searchState.hasResult(form.input)) {
+    const items = await getItemsList(form.input);
+    searchState.setResult(form.input, items);
+  }
+
+  items.value = searchState.getResult(form.input);
   isLoadingItems.value = false;
 };
 
@@ -32,7 +48,14 @@ const querySearch = async (queryString: string, cb: any) => {
 const handleShowDetail = async (id: number, name: string) => {
   isLoadingDetail.value = true;
   itemName.value = name;
-  itemDetail.value = await getItemPrices(id);
+
+  if (!detailsState.hasResult(id)) {
+    const items = await getItemPrices(id);
+    detailsState.setResult(id, items);
+  }
+
+  itemDetail.value = detailsState.getResult(id);
+
   isLoadingDetail.value = false;
   dialogVisible.value = true;
 };
@@ -212,7 +235,7 @@ const sortByPrice = (a: ItemPrice, b: ItemPrice) => {
       <el-table-column label="Ссылка" align="center">
         <template #default="scope">
           <el-link
-            :href="`https://minicen.ru/#!Tovar/${scope.row.id}`"
+            :href="`https://minicen.ru/#City/${cityName}/#!Tovar/${scope.row.id}/`"
             type="default"
             target="_blank"
             >Посмотреть на сайте</el-link

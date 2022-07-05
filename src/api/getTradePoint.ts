@@ -1,4 +1,5 @@
 import https from "../helpers/https";
+import { useLocationState } from "../stores/location";
 
 export interface TradePointBase {
   AddressDostShort: string;
@@ -16,9 +17,12 @@ interface Data {
 }
 
 export const getTradePoint = async (tradePointId: number) => {
+  const location = useLocationState();
+  const city = location.city?.id;
+
   const data = await https.get<Data>("/Proc/TradePointGet", {
     params: {
-      idCity: 1,
+      idCity: city,
       ApiVersion: 3,
     },
   });

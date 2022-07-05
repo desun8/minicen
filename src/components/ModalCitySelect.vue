@@ -1,13 +1,27 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
-import { City, getCities } from "../api/getCities";
+import { CityWithTradePoint, getCities } from "../api/getCities";
+import { useLocationState } from "../stores/location";
 
-const cities = ref<City[]>();
-const selectedCity = ref<string>("");
+const locationState = useLocationState();
+
+const cities = ref<CityWithTradePoint[] | null>(null);
+const selectedCity = ref<CityWithTradePoint | null>(null);
 const isDialogShow = ref(true);
 
 const handleSelectCity = () => {
-  localStorage.setItem("city", selectedCity.value);
+  locationState.$patch((state) => {
+    if (selectedCity.value) {
+      state.city = {
+        id: selectedCity.value.id,
+        name: selectedCity.value.name,
+        transliteration: selectedCity.value.transliteration,
+      };
+
+      state.tradePoint = selectedCity.value.tradePointId;
+    }
+  });
+
   isDialogShow.value = false;
 };
 
@@ -25,12 +39,17 @@ onMounted(async () => {
     :close-on-press-escape="false"
     :show-close="false"
   >
-    <el-select v-model="selectedCity" placeholder="Выберите город" filterable>
+    <el-select
+      v-model="selectedCity"
+      value-key="id"
+      placeholder="Выберите город"
+      filterable
+    >
       <el-option
         v-for="item in cities"
         :key="item.id"
         :label="item.name"
-        :value="JSON.stringify(item)"
+        :value="item"
       >
       </el-option>
     </el-select>

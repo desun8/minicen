@@ -13,11 +13,16 @@ export type City = {
   id: number;
   name: string;
   transliteration: string;
+};
+
+type TradePointId = {
   tradePointId: number;
 };
 
+export type CityWithTradePoint = City & TradePointId;
+
 export const getCities = async () => {
-  const cities: City[] = [];
+  const cities: CityWithTradePoint[] = [];
 
   const data = await https.get<Response>("/geo/getalltradepoints?ApiVersion=3");
   const allTradePoints = data?.Data;

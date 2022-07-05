@@ -1,4 +1,5 @@
 import https from "../helpers/https";
+import { useLocationState } from "../stores/location";
 
 export type TovarPagination = {
   PageCount: number;
@@ -36,11 +37,12 @@ const filterItems = (items: Tovar[]) =>
 
 export const getItemsList = async (name: string) => {
   let page = 1;
+  const tradePoint = useLocationState().tradePoint;
   const items = [];
 
   let data = await https.get<Data>("/search/main", {
     params: {
-      idTradePoint: 15651,
+      idTradePoint: tradePoint,
       Request: name,
       Page: page,
       PerPage: 1,
@@ -60,7 +62,7 @@ export const getItemsList = async (name: string) => {
 
     data = await https.get<Data>("/search/main", {
       params: {
-        idTradePoint: 15651,
+        idTradePoint: tradePoint,
         Request: name,
         Page: page,
         PerPage: 1,
