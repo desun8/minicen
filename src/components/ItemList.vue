@@ -102,7 +102,7 @@ const sortByPrice = (a: ItemPrice, b: ItemPrice) => {
 </script>
 
 <template>
-  <div class="max-w-screen-sm mx-auto px-6">
+  <div>
     <el-header height="">
       <el-form
         :model="form"

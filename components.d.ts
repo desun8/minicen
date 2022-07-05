@@ -29,6 +29,7 @@ declare module 'vue' {
     ModalCitySelect: typeof import('./src/components/ModalCitySelect.vue')['default']
     Search: typeof import('./src/components/Search.vue')['default']
     SearchResult: typeof import('./src/components/SearchResult.vue')['default']
+    TheHeader: typeof import('./src/components/TheHeader.vue')['default']
   }
 }
 

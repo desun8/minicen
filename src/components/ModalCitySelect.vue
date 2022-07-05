@@ -1,13 +1,24 @@
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
-import { CityWithTradePoint, getCities } from "../api/getCities";
+import { computed, onMounted, ref } from "vue";
+import { CityWithTradePoint } from "../api/getCities";
 import { useLocationState } from "../stores/location";
+import { useModalCityState } from "../stores/modalCity";
 
 const locationState = useLocationState();
+const citiesList = computed(() => locationState.citiesList);
 
-const cities = ref<CityWithTradePoint[] | null>(null);
+const modalState = useModalCityState();
+const isDialogShow = computed({
+  get() {
+    return modalState.isShow;
+  },
+
+  set(newVal) {
+    modalState.isShow = newVal;
+  },
+});
+
 const selectedCity = ref<CityWithTradePoint | null>(null);
-const isDialogShow = ref(true);
 
 const handleSelectCity = () => {
   locationState.$patch((state) => {
@@ -26,7 +37,9 @@ const handleSelectCity = () => {
 };
 
 onMounted(async () => {
-  cities.value = await getCities();
+  if (!citiesList.value) {
+    await locationState.getCitiesList();
+  }
 });
 </script>
 
@@ -46,16 +59,22 @@ onMounted(async () => {
       filterable
     >
       <el-option
-        v-for="item in cities"
-        :key="item.id"
-        :label="item.name"
-        :value="item"
+        v-for="city in citiesList"
+        :key="city.id"
+        :label="city.name"
+        :value="city"
       >
       </el-option>
     </el-select>
 
     <template #footer>
       <span>
+        <el-button
+          v-show="locationState.city"
+          type="danger"
+          @click="isDialogShow = false"
+          >Отменить</el-button
+        >
         <el-button
           :disabled="!selectedCity"
           type="primary"

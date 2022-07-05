@@ -1,10 +1,15 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
-import { City } from "../api/getCities";
+import { City, CityWithTradePoint, getCities } from "../api/getCities";
 
 export const useLocationState = defineStore("location", () => {
   const city = ref<City>();
+  const citiesList = ref<CityWithTradePoint[]>();
   const tradePoint = ref<number>();
 
-  return { city, tradePoint };
+  const getCitiesList = async () => {
+    citiesList.value = await getCities();
+  };
+
+  return { city, citiesList, tradePoint, getCitiesList };
 });
