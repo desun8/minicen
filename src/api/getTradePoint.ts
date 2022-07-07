@@ -27,7 +27,7 @@ export const getTradePoint = async (tradePointId: number) => {
     },
   });
 
-  const tradePoint = data!.Data.find(
+  const tradePoint = data?.Data.find(
     (point) => point.idRecord === tradePointId
   );
 

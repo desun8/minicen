@@ -22,9 +22,17 @@ const handleSearch = async () => {
   searchState.isLoading = false;
 };
 
-const querySearch = async (queryString: string, cb: any) => {
+const querySearch = async (
+  queryString: string,
+  cb: (a: Array<{ value: string }>) => void
+) => {
   const suggestions = await getSearchSuggestions(queryString);
-  const results = suggestions.map((suggestion) => ({ value: suggestion }));
+  let results;
+  if (suggestions) {
+    results = suggestions.map((suggestion) => ({ value: suggestion }));
+  } else {
+    results = [{ value: "" }];
+  }
   // call callback function to return suggestions
   cb(results);
 };

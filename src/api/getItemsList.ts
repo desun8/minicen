@@ -53,25 +53,27 @@ export const getItemsList = async (name: string) => {
     },
   });
 
-  const totalPage = data!.Data.tovarPagination.PageCount;
+  if (data) {
+    const totalPage = data.Data.tovarPagination.PageCount;
 
-  items.push(...data!.Data.tovar);
+    items.push(...data.Data.tovar);
 
-  while (page < totalPage) {
-    page++;
+    while (page < totalPage) {
+      page++;
 
-    data = await https.get<Data>("/search/main", {
-      params: {
-        idTradePoint: tradePoint,
-        Request: name,
-        Page: page,
-        PerPage: 1,
-        SearchType: 1,
-        ApiVersion: 3,
-      },
-    });
+      data = await https.get<Data>("/search/main", {
+        params: {
+          idTradePoint: tradePoint,
+          Request: name,
+          Page: page,
+          PerPage: 1,
+          SearchType: 1,
+          ApiVersion: 3,
+        },
+      });
 
-    items.push(...data!.Data.tovar);
+      data && items.push(...data.Data.tovar);
+    }
   }
 
   const res = filterItems(items);

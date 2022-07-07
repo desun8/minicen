@@ -13,5 +13,5 @@ export const getSearchSuggestions = async (text: string) => {
     },
   });
 
-  return data!.Data;
+  return data?.Data;
 };
