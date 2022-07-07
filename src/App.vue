@@ -1,14 +1,14 @@
 <script setup lang="ts">
-import ItemList from "./components/ItemList.vue";
-import ModalCitySelect from "./components/ModalCitySelect.vue";
 import TheHeader from "./components/TheHeader.vue";
+import TheMain from "./components/TheMain.vue";
+import ModalCitySelect from "./components/ModalCitySelect.vue";
 </script>
 
 <template>
   <div class="max-w-screen-sm mx-auto px-6">
     <the-header></the-header>
+    <the-main></the-main>
     <modal-city-select></modal-city-select>
-    <item-list></item-list>
   </div>
 </template>
 

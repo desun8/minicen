@@ -1,26 +1,11 @@
 <script setup lang="ts">
-import { computed } from "vue";
-import { useLocationState } from "../stores/location";
-import { useModalCityState } from "../stores/modalCity";
-
-const locationState = useLocationState();
-const displayText = computed(
-  () => locationState.city?.name || "Выберите город"
-);
-
-const modalState = useModalCityState();
+import TheHeaderCity from "./TheHeaderCity.vue";
+import TheSearch from "./TheSearch.vue";
 </script>
 
 <template>
-  <el-header class="grid">
-    <el-button
-      class="justify-self-end hover:underline"
-      :style="!locationState.city && 'opacity: 0;'"
-      link
-      type="primary"
-      size="large"
-      @click="modalState.isShow = true"
-      >{{ displayText }}</el-button
-    >
+  <el-header class="grid gap-4 h-auto">
+    <the-header-city></the-header-city>
+    <the-search></the-search>
   </el-header>
 </template>

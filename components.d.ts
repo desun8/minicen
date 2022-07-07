@@ -27,9 +27,13 @@ declare module 'vue' {
     ItemList: typeof import('./src/components/ItemList.vue')['default']
     Loading: typeof import('element-plus/es')['ElLoadingDirective']
     ModalCitySelect: typeof import('./src/components/ModalCitySelect.vue')['default']
+    ModalItemDetails: typeof import('./src/components/ModalItemDetails.vue')['default']
     Search: typeof import('./src/components/Search.vue')['default']
     SearchResult: typeof import('./src/components/SearchResult.vue')['default']
     TheHeader: typeof import('./src/components/TheHeader.vue')['default']
+    TheHeaderCity: typeof import('./src/components/TheHeaderCity.vue')['default']
+    TheMain: typeof import('./src/components/TheMain.vue')['default']
+    TheSearch: typeof import('./src/components/TheSearch.vue')['default']
   }
 }
 
