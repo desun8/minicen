@@ -21,17 +21,15 @@ const isDialogShow = computed({
 const selectedCity = ref<CityWithTradePoint | null>(null);
 
 const handleSelectCity = () => {
-  locationState.$patch((state) => {
-    if (selectedCity.value) {
-      state.city = {
-        id: selectedCity.value.id,
-        name: selectedCity.value.name,
-        transliteration: selectedCity.value.transliteration,
-      };
+  if (selectedCity.value) {
+    locationState.setCity({
+      id: selectedCity.value.id,
+      name: selectedCity.value.name,
+      transliteration: selectedCity.value.transliteration,
+    });
 
-      state.tradePoint = selectedCity.value.tradePointId;
-    }
-  });
+    locationState.setTradePoint(selectedCity.value.tradePointId);
+  }
 
   isDialogShow.value = false;
 };
