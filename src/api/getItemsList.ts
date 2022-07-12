@@ -77,6 +77,5 @@ export const getItemsList = async (name: string) => {
   }
 
   const res = filterItems(items);
-  console.log("getItemsList", res);
   return res;
 };

@@ -7,11 +7,6 @@ export default class https {
     try {
       const response = await axios.get(url, config);
 
-      console.log(
-        "🚀 ~ file: https.ts ~ line 7 ~ Https ~ get ~ response",
-        response
-      );
-
       return await response.data;
     } catch (error) {
       console.log(error);
