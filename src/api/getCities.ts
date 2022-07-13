@@ -28,6 +28,8 @@ export const getCities = async () => {
   const allTradePoints = data?.Data;
 
   if (allTradePoints) {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     const cyrillicToTranslit = new CyrillicToTranslit();
 
     for (const city in allTradePoints) {
